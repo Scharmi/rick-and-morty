@@ -45,7 +45,7 @@ const findLongestWord = (str:string) => {
 }
 
 const fontSize = (str: string) => {
-    if((findLongestWord(str) > 10) || (str.length > 18)) return 1.8;
+    if((findLongestWord(str) > 10) || (str.length > 16)) return 1.8;
     return 2.5;
 }
 

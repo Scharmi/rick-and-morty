@@ -36,6 +36,10 @@ export function CharacterList(props: Props) {
     const [searchText, setSearchText] = useState("");
     const [downloaded, setDownloaded] = useState(false);
     const [page, setPage] = useState<number>(1);
+    const setSearchAndResetPage = (searchText: string) => {
+        setSearchText(searchText);
+        setPage(1);
+    }
     const dispatch = useDispatch();
     useEffect(() => {
         if(!downloaded) {
@@ -62,7 +66,7 @@ export function CharacterList(props: Props) {
         : 
             <CharacterListContent>
                 <CharacterTilesWrapper>
-                    <SearchBar searchText={searchText} setSearchText={setSearchText}/>
+                    <SearchBar searchText={searchText} setSearchText={setSearchAndResetPage}/>
                     {displayCharacters.map((character: Character) => (<CharacterTile key={character.id} character={character}/>))}
                 </CharacterTilesWrapper>
                 <PageSwitch pageNumber={page} maxPage={(filteredCharacters.length + charactersOnPage - 1)/charactersOnPage} setPage={setPage}/>
