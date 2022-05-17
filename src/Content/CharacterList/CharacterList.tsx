@@ -5,6 +5,7 @@ import { SearchBar } from './SearchBar/SearchBar';
 import { Character } from 'interfaces'
 import { apiCalls } from 'utils/apiCalls'
 import styled from 'styled-components'
+import { PageSwitch } from './PageSwitch';
 
 
 interface Props {
@@ -12,8 +13,7 @@ interface Props {
 }
 export const CharacterListContent = styled.div`
     color: red;
-    margin-left: auto;
-    margin-right: auto;
+    margin: auto;
     width: 100%;
 `
 
@@ -30,8 +30,10 @@ export const CharacterTilesWrapper = styled.div`
 export function CharacterList(props: Props) {
 
     let allCharacters = useSelector((state:any) => state.characters);
+    const charactersOnPage = 20;
     const [searchText, setSearchText] = useState("");
     const [downloaded, setDownloaded] = useState(false);
+    const [page, setPage] = useState<number>(1);
     const dispatch = useDispatch();
     useEffect(() => {
         if(!downloaded) {
@@ -42,23 +44,26 @@ export function CharacterList(props: Props) {
     }, [dispatch, downloaded, setDownloaded]);
 
     const favouriteIds = useSelector((state:any) => state.favourites);
-    let displayCharacters = allCharacters;
+    let filteredCharacters = allCharacters;
 
     if(props.favourite) {
-        displayCharacters = allCharacters.filter((character:Character) => (favouriteIds.has(character.id)))
+        filteredCharacters = allCharacters.filter((character:Character) => (favouriteIds.has(character.id)))
     }
-    displayCharacters = displayCharacters.filter((character:Character) => (character.name.toLowerCase().includes(searchText.toLowerCase())));
+    filteredCharacters = filteredCharacters.filter((character:Character) => (character.name.toLowerCase().includes(searchText.toLowerCase())));
+    const displayCharacters = filteredCharacters.filter((character:Character) => 
+        (filteredCharacters.indexOf(character) + 1 <= page * charactersOnPage) && (filteredCharacters.indexOf(character) + 1 > (page - 1) * charactersOnPage)
+    )
 
     return (
         (allCharacters.length === 0) ? 
             <div>Loading...</div> 
         : 
             <CharacterListContent>
-
                 <CharacterTilesWrapper>
                     <SearchBar searchText={searchText} setSearchText={setSearchText}/>
-                    {displayCharacters.map((character: Character) => (<CharacterTile character={character}/>))}
+                    {displayCharacters.map((character: Character) => (<CharacterTile key={character.id} character={character}/>))}
                 </CharacterTilesWrapper>
+                <PageSwitch pageNumber={page} maxPage={(filteredCharacters.length + charactersOnPage - 1)/charactersOnPage} setPage={setPage}/>
             </CharacterListContent>
     )
 }

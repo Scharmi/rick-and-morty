@@ -5,5 +5,5 @@ interface Props {
 }
 
 export function Footer(props: Props) {
-    return <>FOOTER</>
+    return <></>
 }

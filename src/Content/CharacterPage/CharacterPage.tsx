@@ -1,23 +1,29 @@
 import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { Character, CharacterLocation } from 'interfaces'
+import { Character } from 'interfaces'
 import styled from "styled-components"
+import { storeCalls } from 'utils/storeCalls'
 interface Props {
 
 }
 
-export const Container = styled.div`
-    display: flex;
-    justify-content:space-evenly;
-    align-items: center;
-    color: white;
-    background-color: #131A22;
+export const CharacterPageContent = styled.div`
+    border: 5px solid black;
+    border-radius: 20px;
+    margin: 10vh 40%;
+`
+export const DataLine = styled.div`
+    margin-left:15px;
+    margin-top: 6px;
+`
+export const DataWrapper = styled.div`
+    margin: 15px 0;
 `
 
 export function CharacterPage(props: Props) {
     const params = useParams();
     const id = params.id 
-    const [character, setCharacater] = useState<Character | null>(null);
+    const [character, setCharacater] = useState<Character | null>(storeCalls.getCharacterById(Number(id)));
 
     if(character === null) {
         fetch(`https://rickandmortyapi.com/api/character/` + id)
@@ -30,40 +36,23 @@ export function CharacterPage(props: Props) {
     if(character === null) return (
         <div>Loading data...</div>
     )
-
-    const keys = Object.keys(character);
-    let list = keys.map((key:any) => {
-        if(key === "episode") {
-            return (
-                <div key={key}>
-                    {key}: {(character[key as keyof Character] as Array<String>).map((e:any) => (<div>{e}</div>))}
-                </div>)
-        }
-
-        if(typeof(character[key as keyof Character]) === "object") {
-            return (
-                <div key={key}>
-                    {key}: {(character[key as keyof Character] as CharacterLocation).name}
-                </div>
-            )
-        }
-        if(key === "image") 
-            return (
-                <div key={key}>
-                    {key}: <img src={String(character[key as keyof Character])} alt="character"/>
-                </div>
-            );
-        if(key === "url") {
-            return (
-                <div key={key}>
-                    {key}: <a href={String(character[key as keyof Character])}>{String(character[key as keyof Character])}</a>
-                </div>
-            )
-        }
-
-        
-        return (<div key={key}>{key}: {String(character[key as keyof Character])}</div>)
-    })
-    return (<div>{list}</div>)
+    const episodes = character.episode.map((episode:string) => (
+        <span key={episode}>{episode.slice(episode.lastIndexOf('/') + 1)} </span>
+    ))
+    return (
+        <CharacterPageContent>
+            <img src={character.image} alt={character.name} style={{width:"100%", borderRadius: "15px 15px 0 0"}}/>
+            <DataWrapper>
+                <DataLine><b>Name: </b>{character.name}</DataLine>
+                <DataLine><b>Species: </b>{character.species}</DataLine>
+                <DataLine><b>Type: </b>{character.type}</DataLine>
+                <DataLine><b>Gender: </b>{character.gender}</DataLine>
+                <DataLine><b>Status: </b>{character.status}</DataLine>
+                <DataLine><b>Origin: </b>{character.origin.name}</DataLine>
+                <DataLine><b>Location: </b>{character.location.name}</DataLine>
+                <DataLine><b>Episodes: </b>{episodes}</DataLine>
+            </DataWrapper>
+        </CharacterPageContent>
+    )
 }
 

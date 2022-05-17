@@ -11,18 +11,23 @@ export const NavbarContent = styled.div`
     justify-content:space-evenly;
     align-items: center;
     color: white;
-    background-color: #131A22;
+    background-color: #008CBA;
+    margin: 0px;
+    width: 100%;
+    font-size: 3vw;
 `
 
 export function Navbar(props: Props) {
     return (
-    <div>
+    <NavbarContent>
       <NavLink
         style={({ isActive }) => {
           return {
             margin: "15px",
-            color: isActive ? "red" : "",
-            display: "inline-block"
+            color: isActive ? "#FE5D26" : "white",
+            display: "inline-block",
+            textWeight: isActive ? "bold" : "normal",
+            textDecoration: "none"
           };
         }}
         to={`/characters`}
@@ -34,8 +39,10 @@ export function Navbar(props: Props) {
             style={({ isActive }) => {
               return {
                 margin: "1rem 0",
-                color: isActive ? "red" : "",
-                display: "inline-block"
+                color: isActive ? "#FE5D26" : "white",
+                display: "inline-block",
+                textWeight: isActive ? "bold" : "normal",
+                textDecoration: "none"
               };
             }}
             to={`/favourite-characters`}
@@ -43,6 +50,6 @@ export function Navbar(props: Props) {
           >
             Favourite Characters
           </NavLink>
-    </div>
+    </NavbarContent>
     )
 }

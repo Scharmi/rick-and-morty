@@ -4,19 +4,20 @@ import { Link } from 'react-router-dom'
 import { storeCalls } from 'utils/storeCalls';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components'
-import { PrimaryButton } from 'utils/Buttons'
+import { PrimaryButton, SecondaryButton } from 'Buttons'
 
 interface Props {
     character: Character;
 }
 const CharacterTileContent = styled.div`
     justify-content: center;
+    text-align: center;
     align-items:center;
     color: red;
     display:inline-block;
     margin: 8px;
-    width: 20%;
-    padding: 15px;
+    width: 15%;
+    padding: 5px 15px;
     border: 3px solid black;
     border-radius: 10px;
 `
@@ -28,18 +29,29 @@ const CharacterName = styled.div`
         color:red;
         text-decoration: none;
     }
-    min-height: 6vw;
+    vertical-align: top;
+    min-height: 7vw;
+
 `
 const fontSize = (length:number) => {
-    if(length > 20) return 2;
-    if(length > 10) return 2.5;
-    return 3;
+    if(length > 12) return 1.8;
+    return 2.5;
 }
 
 const CharacterNameText = styled.span`
     font-size: ${props => props.theme.size}vw;
 `
+const ButtonWrapper = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 5px;
+    min-height: 8vw;
+`
 
+const ContentWrapper = styled.div`
+    display: block;
+`
 
 
 export function CharacterTile(props: Props) {
@@ -47,18 +59,10 @@ export function CharacterTile(props: Props) {
     const dispatch = useDispatch();
     const favourites = useSelector((state:any) => (state.favourites))
     const isFavourite = favourites.has(character.id);
-    return (
-        <CharacterTileContent>
-
-            <Link to={'../character/' + character.id} style={{textDecoration: 'none'}}>
-                <CharacterName>
-                    <CharacterNameText theme={{size: fontSize(character.name.length)}}>{character.name}</CharacterNameText>
-                </CharacterName>
-                <div><img src={character.image} alt={character.name} style={{width: "100%"}}/></div>
-                
-            </Link>
-            
-            <PrimaryButton
+    function renderButton() {
+        if(isFavourite) {
+            return (
+                <SecondaryButton
                 onClick={
                     () => {
                         isFavourite 
@@ -68,9 +72,41 @@ export function CharacterTile(props: Props) {
                             storeCalls.addFavourite(dispatch, character.id)
                     }
                 }
+                >
+                Remove from favourites
+                </SecondaryButton>
+            )
+        }
+        return (
+            <PrimaryButton
+            onClick={
+                () => {
+                    isFavourite 
+                        ? 
+                        storeCalls.removeFavourite(dispatch, character.id) 
+                        : 
+                        storeCalls.addFavourite(dispatch, character.id)
+                }
+            }
             >
-            {isFavourite ? "Remove from favourites" : "Add to favourites"}
+            Add to favourites
             </PrimaryButton>
+        )
+    }
+    return (
+        <CharacterTileContent>
+            <ContentWrapper>
+                <Link to={'../character/' + character.id} style={{textDecoration: 'none'}}>
+                    <CharacterName>
+                        <CharacterNameText theme={{size: fontSize(character.name.length)}}>{character.name}</CharacterNameText>
+                    </CharacterName>
+                    <img src={character.image} alt={character.name} style={{"width": "100%", "margin":"0"}}/>
+                    
+                </Link>
+                <ButtonWrapper>
+                    {renderButton()}
+                </ButtonWrapper>
+            </ContentWrapper>
         </CharacterTileContent>
     )
 }

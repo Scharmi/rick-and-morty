@@ -14,6 +14,13 @@ export function SearchBar(props: Props) {
                 type="text" 
                 value={props.searchText} 
                 onChange={newText => props.setSearchText(newText.target.value)}
+                placeholder="Search..."
+                style = {{
+                    padding: "20px",
+                    fontSize: "20px",
+                    border: "3px solid black",
+                    borderRadius: "5px"
+                }}
             />
         </div>
     )

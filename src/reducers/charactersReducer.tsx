@@ -1,4 +1,6 @@
-const initState: any = [];
+import { Character } from 'interfaces'
+
+const initState: Array<Character> = [];
 
 const charactersReducer = (state = initState, action: any) => {
     
@@ -11,7 +13,6 @@ const charactersReducer = (state = initState, action: any) => {
 };
 
 export const downloadReducer = (state = false, action: any) => {
-    
   switch (action.type) {
     case 'FETCH_CHARACTERS_SUCCESS':
       return true;

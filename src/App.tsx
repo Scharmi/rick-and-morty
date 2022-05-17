@@ -12,7 +12,6 @@ const SetFont = styled.span`
 `
 
 function App() {
-  console.log("APP RENDER");
   return (
     <SetFont>  
       <Navbar/>
