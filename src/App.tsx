@@ -5,16 +5,20 @@ import {
 } from "react-router-dom";
 import { Navbar } from './Navbar/Navbar';
 import { Footer } from './Footer/Footer';
+import styled from 'styled-components'
 
-
+const SetFont = styled.span`
+    font-family: Arial;
+`
 
 function App() {
+  console.log("APP RENDER");
   return (
-    <>  
-    <Navbar/>
-    <Outlet/>
-    <Footer/>
-    </>
+    <SetFont>  
+      <Navbar/>
+      <Outlet/>
+      <Footer/>
+    </SetFont>
   );
 }
 

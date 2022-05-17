@@ -1,9 +1,18 @@
 import React from 'react'
 import { NavLink } from "react-router-dom"
+import styled from 'styled-components'
 
 interface Props {
 
 }
+
+export const NavbarContent = styled.div`
+    display: flex;
+    justify-content:space-evenly;
+    align-items: center;
+    color: white;
+    background-color: #131A22;
+`
 
 export function Navbar(props: Props) {
     return (
