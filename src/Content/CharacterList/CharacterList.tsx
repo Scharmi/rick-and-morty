@@ -6,18 +6,19 @@ import { Character } from 'interfaces'
 import { apiCalls } from 'utils/apiCalls'
 import styled from 'styled-components'
 import { PageSwitch } from './PageSwitch';
+import { Loader } from '../Loader/Loader';
 
 
 interface Props {
     favourite?: boolean
 }
-export const CharacterListContent = styled.div`
+const CharacterListContent = styled.div`
     color: red;
     margin: auto;
     width: 100%;
 `
 
-export const CharacterTilesWrapper = styled.div`
+const CharacterTilesWrapper = styled.div`
     justify-content: center ;
     align-items: center;
     margin:auto;
@@ -25,8 +26,9 @@ export const CharacterTilesWrapper = styled.div`
     overflow: hidden;
     padding: 50px;
     text-align: center;
-
 `
+
+
 export function CharacterList(props: Props) {
 
     let allCharacters = useSelector((state:any) => state.characters);
@@ -56,7 +58,7 @@ export function CharacterList(props: Props) {
 
     return (
         (allCharacters.length === 0) ? 
-            <div>Loading...</div> 
+            <Loader>Loading characters list...</Loader> 
         : 
             <CharacterListContent>
                 <CharacterTilesWrapper>

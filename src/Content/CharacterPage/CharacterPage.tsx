@@ -3,6 +3,8 @@ import { useParams } from 'react-router-dom'
 import { Character } from 'interfaces'
 import styled from "styled-components"
 import { storeCalls } from 'utils/storeCalls'
+import { Loader } from '../Loader/Loader';
+
 interface Props {
 
 }
@@ -34,7 +36,7 @@ export function CharacterPage(props: Props) {
     }
 
     if(character === null) return (
-        <div>Loading data...</div>
+        <Loader>Loading character data...</Loader>
     )
     const episodes = character.episode.map((episode:string) => (
         <span key={episode}>{episode.slice(episode.lastIndexOf('/') + 1)} </span>
